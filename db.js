@@ -7,7 +7,7 @@ const db = () => {
     // const usuario = process.env.DB_USUARIO;
     // const cluster = process.env.DB_CLUSTER;
 
-    const url = `mongodb+srv://admin:admin@cluster.veqhb.mongodb.net/MERN_Project_BackEnd?retryWrites=true&w=majority`;
+    const url = `mongodb+srv://juan:1234@cluster0.oyrs41k.mongodb.net/?retryWrites=true&w=majority`;
 
     mongoose.connect(url, {
         useNewUrlPArser: true,

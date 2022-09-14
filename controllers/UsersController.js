@@ -1,50 +1,45 @@
 const UsersController = {};
-// const authConfig = require('../config/auth');
-// const User = require('../models/user.js');
+const authConfig = require('../config/auth');
+const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
 
-// UsersController.userRegister = async (req, res) => {
+UsersController.userRegister = async (req, res) => {
 
-//     //Registrando un usuario
-//     let firstName = req.body.firstName;
-//     let lastName = req.body.lastName;
-//     let birthday = req.body.birthday;
-//     let email = req.body.email;
-//     let userName = req.body.userName;
-//     let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+    //Registrando un usuario
+    let userName = req.body.userName;
+    let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+    let pokemons = req.body.pokemons;
 
 
-//     //Comprobación de errores.....
-//     User.find({
-//         email: email
 
-//         //SERIA BUENA IDEA SOLICITAR COMPROBACION DE NO REPETIR NICK
-//     }).then(datosRepetidos => {
+    //Comprobación de errores.....
+    User.find({
+        userName: userName
 
-//         if (datosRepetidos == false) {
+        //SERIA BUENA IDEA SOLICITAR COMPROBACION DE NO REPETIR NICK
+    }).then(datosRepetidos => {
 
-//             User.create({
-//                 firstName: firstName,
-//                 lastName: lastName,
-//                 birthday: birthday,
-//                 email: email,
-//                 userName: userName,
-//                 password: password,
-//             }).then(user => {
-//                 res.send(`${user.firstName}, Has sido registrado con exito`);
-//             }).catch((error) => {
-//                 res.send(error);
-//             });
-//         } else {
-//             res.send("El usuario con ese e-mail ya existe en nuestra base de datos");
-//         }
-//     }).catch(error => {
-//         res.send(error)
-//     });
-// };
+        if (datosRepetidos == false) {
+
+            User.create({
+                userName: userName,
+                password: password,
+                pokemons: pokemons,
+            }).then(user => {
+                res.send(`${user.userName}, Has sido registrado con exito`);
+            }).catch((error) => {
+                res.send(error);
+            });
+        } else {
+            res.send("El usuario con ese e-mail ya existe en nuestra base de datos");
+        }
+    }).catch(error => {
+        res.send(error)
+    });
+};
 
 // UsersController.allUser = async (req, res) => {
 
