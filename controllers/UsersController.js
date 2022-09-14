@@ -4,9 +4,7 @@ const UsersController = {};
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-UsersController.quefue = async (req,res) => {
-    res.send("hola")
-}
+
 
 // UsersController.userRegister = async (req, res) => {
 

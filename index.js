@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 let PORT = process.env.PORT || 5000;
 const router = require('./router');
-// const db = require('./db.js');
+const db = require('./db.js');
 
 
 let corsOptions = {//CONFIGURO OPCIONES DE CORS
@@ -19,6 +19,6 @@ app.use(express.json()); //PUEDO OBTENER JSON DEL BODY
 app.use(cors(corsOptions));  //USO CORS
 app.use(router);
 
-// db()
+db()
 
 app.listen(PORT, () => console.log(`Server on port ${PORT}`)); //Conectado a la base de datos
