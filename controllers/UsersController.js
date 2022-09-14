@@ -41,257 +41,254 @@ UsersController.userRegister = async (req, res) => {
     });
 };
 
-// UsersController.allUser = async (req, res) => {
+UsersController.allUser = async (req, res) => {
 
-//     try {
+    try {
 
-//         await User.find()
-//             .then(data => {
-//                 res.send(data)
-//             }).catch(error => {
-//                 res.send(error)
-//             })
+        await User.find()
+            .then(data => {
+                res.send(data)
+            }).catch(error => {
+                res.send(error)
+            })
 
-//     } catch (error) {
+    } catch (error) {
 
-//         res.send(error)
-//     }
-// }
+        res.send(error)
+    }
+}
 
-// UsersController.userDelete = async (req, res) => {
+UsersController.userDelete = async (req, res) => {
 
-//     let _id = req.body._id
+    let _id = req.body._id
 
-//     try {
+    try {
 
 
-//         await User.findByIdAndDelete({
-//             _id: _id
-//         })
-//             .then(userDelete => {
-//                 console.log(userDelete);
-//                 res.send(`El usuario con el nombre ${userDelete.firstName} ha sido eliminado`);
-//             }).catch(error => {
-//                 res.send(error)
-//             })
+        await User.findByIdAndDelete({
+            _id: _id
+        })
+            .then(userDelete => {
+                console.log(userDelete);
+                res.send(`El usuario con el nombre ${userDelete.userName} ha sido eliminado`);
+            }).catch(error => {
+                res.send(error)
+            })
 
-//     } catch (error) {
-//         res.send(error);
-//     }
-// }
+    } catch (error) {
+        res.send(error);
+    }
+}
 
-// UsersController.userUpdate = async (req, res) => {
-//     let _id = req.body._id;
-//     let firstName = req.body.firstName;
-//     let lastName = req.body.lastName;
-//     let email = req.body.email;
-//     let userName = req.body.userName;
+UsersController.userUpdate = async (req, res) => {
+    let _id = req.body._id;
+    let userName = req.body.userName;
+    let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
 
-//     // Enviar Mensaje al usuario que ya sigue a esa persona
-//     try {
-//         await User.findOneAndUpdate(
-//             { _id: _id },
-//             {
-//                 $set: {
-//                     "firstName": firstName,
-//                     "lastName": lastName,
-//                     "email": email,
-//                     "userName": userName,
-//                 },
-//             }
-//         );
-//         res.send("Has modificado los datos correctamente");
-//     } catch (error) {
-//         res.send(error);
-//     }
-// };
 
-// UsersController.userProfile = async (req, res) => {
+    // Enviar Mensaje al usuario que ya sigue a esa persona
+    try {
+        await User.findOneAndUpdate(
+            { _id: _id },
+            {
+                $set: {
+                    "userName": userName,
+                    "password": password,
+                },
+            }
+        );
+        res.send("Has modificado los datos correctamente");
+    } catch (error) {
+        res.send(error);
+    }
+};
 
-//     let _id = req.body._id
+UsersController.userProfile = async (req, res) => {
 
-//     try {
+    let _id = req.body._id
 
-//         User.findById({
-//             _id: _id
-//         }).then(data => {
-//             res.send(data)
-//         }).catch(error => {
-//             res.send(error)
-//         })
+    try {
 
-//     } catch (error) {
+        User.findById({
+            _id: _id
+        }).then(data => {
+            res.send(data)
+        }).catch(error => {
+            res.send(error)
+        })
 
-//         res.send(error)
-//     }
-// }
+    } catch (error) {
 
-// UsersController.userfollowed = async (req, res) => {
+        res.send(error)
+    }
+}
 
-//     let _id = req.body._id
+UsersController.userfollowed = async (req, res) => {
 
-//     let id_followed = req.body.id_followed
-//     let name_followed = req.body.name_followed
-//     let userName_followed = req.body.userName_followed
+    let _id = req.body._id
 
-//     // Enviar Mensaje al usuario que ya sigue a esa persona
-//     try {
+    let id_followed = req.body.id_followed
+    let name_followed = req.body.name_followed
+    let userName_followed = req.body.userName_followed
 
-//         await User.findOneAndUpdate(
-//             { _id: id_followed },
-//             {
-//                 $push: {
-//                     followers: {
-//                         "id_follower": _id
-//                     }
-//                 }
-//             }
-//         )
-//         await User.findOneAndUpdate(
-//             { _id: _id },
-//             {
-//                 $push: {
-//                     followed: {
-//                         "id_followed": id_followed,
-//                         "name_followed": name_followed,
-//                         "userName_followed": userName_followed
-//                     }
-//                 }
-//             }
-//         )
-//         await User.findById({
-//             _id: _id
-//         }).then(data => {
-//             res.send(data)
-//         }).catch(error => {
-//             res.send(error)
-//         })
+    // Enviar Mensaje al usuario que ya sigue a esa persona
+    try {
 
-//     } catch (error) {
-//         res.send(error)
-//     }
-// }
+        await User.findOneAndUpdate(
+            { _id: id_followed },
+            {
+                $push: {
+                    followers: {
+                        "id_follower": _id
+                    }
+                }
+            }
+        )
+        await User.findOneAndUpdate(
+            { _id: _id },
+            {
+                $push: {
+                    followed: {
+                        "id_followed": id_followed,
+                        "name_followed": name_followed,
+                        "userName_followed": userName_followed
+                    }
+                }
+            }
+        )
+        await User.findById({
+            _id: _id
+        }).then(data => {
+            res.send(data)
+        }).catch(error => {
+            res.send(error)
+        })
 
-// UsersController.userUnfollow = async (req, res) => {
-//     console.log(req.body, "entra a unfollow")
-//     let unfollowedId = req.body.unfollowedId;
-//     let userId = req.body.userId;
-//     console.log(unfollowedId, userId, "entra a unfollow")
-//     //Create empty array for manage the followed field
-//     let followed = [];
-//     try {
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+UsersController.userUnfollow = async (req, res) => {
+    console.log(req.body, "entra a unfollow")
+    let unfollowedId = req.body.unfollowedId;
+    let userId = req.body.userId;
+    console.log(unfollowedId, userId, "entra a unfollow")
+    //Create empty array for manage the followed field
+    let followed = [];
+    try {
         
-//         //Find user unfollowed to clean the followers array
-//         await User.find({
-//             _id: unfollowedId
-//         }).then(elmnt => {
-//             //Save actual followers array the variable
-//             let followers = elmnt[0].followers;
+        //Find user unfollowed to clean the followers array
+        await User.find({
+            _id: unfollowedId
+        }).then(elmnt => {
+            //Save actual followers array the variable
+            let followers = elmnt[0].followers;
 
-//             //Find desired user id to unfollow
-//             for (let i = 0; i < followers.length; i++) {
-//                 if (followers[i].id_follower == userId) {
-//                     //remove it of followers array
-//                     followers.splice(i, 1)
-//                     console.log("entramos en el if")
-//                 }
-//             }
-//             console.log(followers, "resultado de followers antes de actualizar el campo")
+            //Find desired user id to unfollow
+            for (let i = 0; i < followers.length; i++) {
+                if (followers[i].id_follower == userId) {
+                    //remove it of followers array
+                    followers.splice(i, 1)
+                    console.log("entramos en el if")
+                }
+            }
+            console.log(followers, "resultado de followers antes de actualizar el campo")
 
-//             //Update followers users
-//             User.updateOne(
-//                 { _id: unfollowedId }, {
+            //Update followers users
+            User.updateOne(
+                { _id: unfollowedId }, {
 
-//                 $set: {
+                $set: {
 
-//                     followers: followers
-//                 }
-//             }
-//             ).then(data => {
-//                 console.log(data, "resultado de followers despues de actualizar el campo")
-//             }).catch(error => {
-//                 console.log(error)
-//             })
-//         })
+                    followers: followers
+                }
+            }
+            ).then(data => {
+                console.log(data, "resultado de followers despues de actualizar el campo")
+            }).catch(error => {
+                console.log(error)
+            })
+        })
 
 
-//         //Find owner user to clean the followed array
-//         await User.find({
-//             _id: userId
-//         }).then(elmnt => {
-//             //Save actual followed array the variable
-//             followed = elmnt[0].followed;
+        //Find owner user to clean the followed array
+        await User.find({
+            _id: userId
+        }).then(elmnt => {
+            //Save actual followed array the variable
+            followed = elmnt[0].followed;
 
-//             //Find desired user id to unfollow
-//             for (let i = 0; i < followed.length; i++) {
-//                 if (followed[i].id_followed == unfollowedId) {
-//                     //remove it of followed array
-//                     followed.splice(i, 1)
-//                 }
-//             }
+            //Find desired user id to unfollow
+            for (let i = 0; i < followed.length; i++) {
+                if (followed[i].id_followed == unfollowedId) {
+                    //remove it of followed array
+                    followed.splice(i, 1)
+                }
+            }
 
-//             //Update followed users
-//             User.updateOne(
-//                 { _id: userId }, {
+            //Update followed users
+            User.updateOne(
+                { _id: userId }, {
 
-//                 $set: {
+                $set: {
 
-//                     followed: followed
-//                 }
-//             }
-//             )//If promise is done, response the edited user
-//                 .then(elmnt => {
-//                     User.find({
-//                         _id: userId
-//                     }).then(user => {
-//                         res.send(user)
-//                     })
-//                 })
-//         })
+                    followed: followed
+                }
+            }
+            )//If promise is done, response the edited user
+                .then(elmnt => {
+                    User.find({
+                        _id: userId
+                    }).then(user => {
+                        res.send(user)
+                    })
+                })
+        })
 
-//     } catch (error) {
-//         res.send(error);
-//     }
+    } catch (error) {
+        res.send(error);
+    }
 
-// }
+}
 
-// UsersController.userLogin = async (req, res) => {
+UsersController.userLogin = async (req, res) => {
 
-//     let email = req.body.email;
-//     let password = req.body.password;
+    let userName = req.body.userName;
+    let password = req.body.password;
 
-//     User.findOne({
-//         email: email
-//     }).then(Usuario => {
+    User.findOne({
+        userName: userName
+    }).then(Usuario => {
 
-//         if (!Usuario) {
-//             res.send("Usuario o contraseña inválido");
+        if (!Usuario) {
+            res.send("Usuario o contraseña inválido");
 
-//         } else {
+        } else {
 
-//             if (bcrypt.compareSync(password, Usuario.password)) { //COMPARA CONTRASEÑA INTRODUCIDA CON CONTRASEÑA GUARDADA, TRAS DESENCRIPTAR
+            if (bcrypt.compareSync(password, Usuario.password)) { //COMPARA CONTRASEÑA INTRODUCIDA CON CONTRASEÑA GUARDADA, TRAS DESENCRIPTAR
 
-//                 let token = jwt.sign({ user: Usuario }, authConfig.secret, {
-//                     expiresIn: authConfig.expires
-//                 });
+                let token = jwt.sign({ user: Usuario }, authConfig.secret, {
+                    expiresIn: authConfig.expires
+                });
 
-//                 Usuario.token = token
-//                 res.json({
-//                     user: Usuario,
-//                     token: token,
-//                     loginSucces: true
-//                 })
+                Usuario.token = token
+                res.json({
+                    user: Usuario,
+                    token: token,
+                    loginSucces: true
+                })
 
-//             } else {
-//                 res.status(401).json({ msg: "Usuario o contraseña inválidos" });
-//             }
-//         };
+            } else {
+                res.status(401).json({ msg: "Usuario o contraseña inválidos" });
+            }
+        };
 
-//     }).catch(error => {
-//         res.send(error);
-//     })
+    }).catch(error => {
+        res.send(error);
+    })
 
-// }
+}
 
 // UsersController.userSearchByUserName = async (req, res) => {
 

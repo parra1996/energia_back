@@ -5,11 +5,11 @@ const UsersController = require("../controllers/UsersController");
 
 router.post("/", UsersController.userRegister);
 
-// router.get("/", UsersController.allUser);
+router.get("/", UsersController.allUser);
 
-// router.delete("/", UsersController.userDelete);
+router.delete("/", UsersController.userDelete);
 
-// router.put("/", UsersController.userUpdate);
+router.put("/", UsersController.userUpdate);
 
 // router.get("/profile", UsersController.userProfile);
 
@@ -17,7 +17,7 @@ router.post("/", UsersController.userRegister);
 
 // router.delete("/followed", UsersController.userUnfollow);
 
-// router.post("/login", UsersController.userLogin);
+router.post("/login", UsersController.userLogin);
 
 // router.post("/results/:userName", UsersController.userSearchByUserName);
 
