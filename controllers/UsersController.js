@@ -41,6 +41,47 @@ UsersController.userRegister = async (req, res) => {
     });
 };
 
+UsersController.atrapar = async (req, res) => {
+
+    let _id = req.body._id
+
+    let id_pokemon = req.body.id_pokemon
+    let imagen = req.body.imagen
+    let nombre = req.body.nombre
+    let elemento = req.body.elemento
+    let vida = req.body.vida
+    let ataque = req.body.ataque
+    let a_especial = req.body.a_especial
+    let velocidad = req.body.velocidad
+    let defensa = req.body.defensa
+
+
+    try {
+        await User.findOneAndUpdate({
+            _id: _id
+        }, {
+            $push: {
+                pokemons: {
+                    "id_pokemon" : req.body.id_pok,
+                    "imagen" : req.body.imagen,
+                    "nombre" : req.body.nombre,
+                    "elemento" : req.body.elemento,
+                    "vida" : req.body.vida,
+                    "ataque" : req.body.ataque,
+                    "a_especial" : req.body.a_especial,
+                    "velocidad" : req.body.velocidad,
+                    "defensa" : req.body.defensa
+                }
+            }
+        })
+        res.send("pokemon has been captured")
+
+    } catch (error) {
+        res.send(error)
+    }
+
+}
+
 UsersController.allUser = async (req, res) => {
 
     try {
@@ -66,8 +107,8 @@ UsersController.userDelete = async (req, res) => {
 
 
         await User.findByIdAndDelete({
-            _id: _id
-        })
+                _id: _id
+            })
             .then(userDelete => {
                 console.log(userDelete);
                 res.send(`El usuario con el nombre ${userDelete.userName} ha sido eliminado`);
@@ -88,15 +129,14 @@ UsersController.userUpdate = async (req, res) => {
 
     // Enviar Mensaje al usuario que ya sigue a esa persona
     try {
-        await User.findOneAndUpdate(
-            { _id: _id },
-            {
-                $set: {
-                    "userName": userName,
-                    "password": password,
-                },
-            }
-        );
+        await User.findOneAndUpdate({
+            _id: _id
+        }, {
+            $set: {
+                "userName": userName,
+                "password": password,
+            },
+        });
         res.send("Has modificado los datos correctamente");
     } catch (error) {
         res.send(error);
@@ -134,28 +174,26 @@ UsersController.userfollowed = async (req, res) => {
     // Enviar Mensaje al usuario que ya sigue a esa persona
     try {
 
-        await User.findOneAndUpdate(
-            { _id: id_followed },
-            {
-                $push: {
-                    followers: {
-                        "id_follower": _id
-                    }
+        await User.findOneAndUpdate({
+            _id: id_followed
+        }, {
+            $push: {
+                followers: {
+                    "id_follower": _id
                 }
             }
-        )
-        await User.findOneAndUpdate(
-            { _id: _id },
-            {
-                $push: {
-                    followed: {
-                        "id_followed": id_followed,
-                        "name_followed": name_followed,
-                        "userName_followed": userName_followed
-                    }
+        })
+        await User.findOneAndUpdate({
+            _id: _id
+        }, {
+            $push: {
+                followed: {
+                    "id_followed": id_followed,
+                    "name_followed": name_followed,
+                    "userName_followed": userName_followed
                 }
             }
-        )
+        })
         await User.findById({
             _id: _id
         }).then(data => {
@@ -177,7 +215,7 @@ UsersController.userUnfollow = async (req, res) => {
     //Create empty array for manage the followed field
     let followed = [];
     try {
-        
+
         //Find user unfollowed to clean the followers array
         await User.find({
             _id: unfollowedId
@@ -196,15 +234,15 @@ UsersController.userUnfollow = async (req, res) => {
             console.log(followers, "resultado de followers antes de actualizar el campo")
 
             //Update followers users
-            User.updateOne(
-                { _id: unfollowedId }, {
+            User.updateOne({
+                _id: unfollowedId
+            }, {
 
                 $set: {
 
                     followers: followers
                 }
-            }
-            ).then(data => {
+            }).then(data => {
                 console.log(data, "resultado de followers despues de actualizar el campo")
             }).catch(error => {
                 console.log(error)
@@ -228,15 +266,15 @@ UsersController.userUnfollow = async (req, res) => {
             }
 
             //Update followed users
-            User.updateOne(
-                { _id: userId }, {
+            User.updateOne({
+                    _id: userId
+                }, {
 
-                $set: {
+                    $set: {
 
-                    followed: followed
-                }
-            }
-            )//If promise is done, response the edited user
+                        followed: followed
+                    }
+                }) //If promise is done, response the edited user
                 .then(elmnt => {
                     User.find({
                         _id: userId
@@ -268,7 +306,9 @@ UsersController.userLogin = async (req, res) => {
 
             if (bcrypt.compareSync(password, Usuario.password)) { //COMPARA CONTRASEÑA INTRODUCIDA CON CONTRASEÑA GUARDADA, TRAS DESENCRIPTAR
 
-                let token = jwt.sign({ user: Usuario }, authConfig.secret, {
+                let token = jwt.sign({
+                    user: Usuario
+                }, authConfig.secret, {
                     expiresIn: authConfig.expires
                 });
 
@@ -280,7 +320,9 @@ UsersController.userLogin = async (req, res) => {
                 })
 
             } else {
-                res.status(401).json({ msg: "Usuario o contraseña inválidos" });
+                res.status(401).json({
+                    msg: "Usuario o contraseña inválidos"
+                });
             }
         };
 
@@ -304,8 +346,3 @@ UsersController.userLogin = async (req, res) => {
 // }
 
 module.exports = UsersController;
-
-
-
-
-

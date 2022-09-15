@@ -18,7 +18,7 @@ const userSchema = new Schema({
     pokemons :[
         {
         
-        id_pokemon: String,
+        id_pokemon: Number,
         imagen: String,
         nombre: String,
         elemento: String,

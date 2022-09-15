@@ -11,6 +11,8 @@ router.delete("/", UsersController.userDelete);
 
 router.put("/", UsersController.userUpdate);
 
+router.post('/atrapar', UsersController.atrapar)
+
 // router.get("/profile", UsersController.userProfile);
 
 // router.post("/followed", UsersController.userfollowed);
