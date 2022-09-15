@@ -9,9 +9,13 @@ router.get("/", UsersController.allUser);
 
 router.delete("/", UsersController.userDelete);
 
+router.delete("/poke", UsersController.pokeDelete);
+
 router.put("/", UsersController.userUpdate);
 
 router.post('/atrapar', UsersController.atrapar)
+
+router.post('/mostrar/:_id', UsersController.mostrar)
 
 // router.get("/profile", UsersController.userProfile);
 

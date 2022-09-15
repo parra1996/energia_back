@@ -3,6 +3,7 @@ const authConfig = require('../config/auth');
 const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+var mongoose = require('mongoose');
 
 
 
@@ -62,7 +63,7 @@ UsersController.atrapar = async (req, res) => {
         }, {
             $push: {
                 pokemons: {
-                    "id_pokemon" : req.body.id_pok,
+                    "id_pokemon" : req.body.id_pokemon,
                     "imagen" : req.body.imagen,
                     "nombre" : req.body.nombre,
                     "elemento" : req.body.elemento,
@@ -80,6 +81,26 @@ UsersController.atrapar = async (req, res) => {
         res.send(error)
     }
 
+}
+
+UsersController.mostrar = async (req,res) => {
+    let _id = req.params._id
+    console.log(_id)
+
+    try {
+
+        User.findById({
+            _id: _id
+        }).then(data => {
+            res.send(data.pokemons)
+        }).catch(error => {
+            res.send(error)
+        })
+
+    } catch (error) {
+
+        res.send(error)
+    }
 }
 
 UsersController.allUser = async (req, res) => {
@@ -120,6 +141,10 @@ UsersController.userDelete = async (req, res) => {
         res.send(error);
     }
 }
+UsersController.pokeDelete = async (req, res) => {
+
+}
+
 
 UsersController.userUpdate = async (req, res) => {
     let _id = req.body._id;
