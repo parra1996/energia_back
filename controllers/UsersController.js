@@ -83,6 +83,90 @@ UsersController.atrapar = async (req, res) => {
 
 }
 
+// UsersController.liberar = async (req,res) => {
+
+//         console.log(req.body, "entra a unfollow")
+
+//         let id_pokemon = req.body.id_pokemon;
+//         let userId = req.body._id;
+//         console.log(id_pokemon, userId, "entra a unfollow")
+//         //Create empty array for manage the followed field
+
+//         try {
+//             //Find user unfollowed to clean the followers array
+//             await User.find({
+//                 _id: userId
+//             }).then(elmnt => {
+//                 //Save actual followers array the variable
+//                 let pokemons = elmnt.pokemons;
+    
+//                 //Find desired user id to unfollow
+//                 for (let i = 0; i < pokemons.length; i++) {
+//                     if (followers[i].id_follower == userId) {
+//                         //remove it of followers array
+//                         followers.splice(i, 1)
+//                         console.log("entramos en el if")
+//                     }
+//                 }
+//                 console.log(followers, "resultado de followers antes de actualizar el campo")
+    
+//                 //Update followers users
+//                 User.updateOne(
+//                     { _id: unfollowedId }, {
+    
+//                     $set: {
+    
+//                         followers: followers
+//                     }
+//                 }
+//                 ).then(data => {
+//                     console.log(data, "resultado de followers despues de actualizar el campo")
+//                 }).catch(error => {
+//                     console.log(error)
+//                 })
+//             })
+    
+    
+//             //Find owner user to clean the followed array
+//             await User.find({
+//                 _id: userId
+//             }).then(elmnt => {
+//                 //Save actual followed array the variable
+//                 followed = elmnt[0].followed;
+    
+//                 //Find desired user id to unfollow
+//                 for (let i = 0; i < followed.length; i++) {
+//                     if (followed[i].id_followed == unfollowedId) {
+//                         //remove it of followed array
+//                         followed.splice(i, 1)
+//                     }
+//                 }
+    
+//                 //Update followed users
+//                 User.updateOne(
+//                     { _id: userId }, {
+    
+//                     $set: {
+    
+//                         followed: followed
+//                     }
+//                 }
+//                 )//If promise is done, response the edited user
+//                     .then(elmnt => {
+//                         User.find({
+//                             _id: userId
+//                         }).then(user => {
+//                             res.send(user)
+//                         })
+//                     })
+//             })
+    
+//         } catch (error) {
+//             res.send(error);
+//         }
+    
+// }
+
 UsersController.mostrar = async (req,res) => {
     let _id = req.params._id
     console.log(_id)
@@ -141,10 +225,6 @@ UsersController.userDelete = async (req, res) => {
         res.send(error);
     }
 }
-UsersController.pokeDelete = async (req, res) => {
-
-}
-
 
 UsersController.userUpdate = async (req, res) => {
     let _id = req.body._id;
@@ -158,8 +238,8 @@ UsersController.userUpdate = async (req, res) => {
             _id: _id
         }, {
             $set: {
-                "userName": userName,
-                "password": password,
+                userName: userName,
+                password: password,
             },
         });
         res.send("Has modificado los datos correctamente");
