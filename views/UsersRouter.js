@@ -13,7 +13,7 @@ router.put("/", UsersController.userUpdate);
 
 router.post('/atrapar', UsersController.atrapar)
 
-// router.delete('/liberar', UsersController.liberar)
+router.delete('/liberar', UsersController.liberar)
 
 router.post('/mostrar/:_id', UsersController.mostrar)
 
