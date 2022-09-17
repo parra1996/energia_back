@@ -1,5 +1,3 @@
-
-
 const db = () => {
     const mongoose = require('mongoose');
     // const clave = process.env.DB_CLAVE;
