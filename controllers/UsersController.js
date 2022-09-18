@@ -51,53 +51,47 @@ UsersController.atrapar = async (req, res) => {
     let defensa = req.body.defensa
     let capturado = false;
 
+    const capturar = async () => {
+
+        await User.findOneAndUpdate({
+            _id: _id
+        }, {
+            $push: {
+                pokemons: {
+                    "id_pokemon": id_pokemon,
+                    "imagen": imagen,
+                    "nombre": nombre,
+                    "elemento": elemento,
+                    "vida": vida,
+                    "ataque": ataque,
+                    "a_especial": a_especial,
+                    "velocidad": velocidad,
+                    "defensa": defensa
+                }
+            }
+        })
+        res.send("pokemon has been captured")
+    }
+
     try {
 
         await User.find({
             _id: _id
         }).then(datos => {
             let cantidadPokemons = datos[0].pokemons.length;
+            let lista = datos[0].pokemons
 
-            if(cantidadPokemons >= 0){
-                for (let i = 0; i < cantidadPokemons; i++) {
-                    if (datos[0].pokemons[i]?.id_pokemon === id_pokemon) {
-                        console.log(i, "ESTO ES I")
-                        console.log(datos[0].pokemons[i]?.id_pokemon, id_pokemon)
-                        capturado = true
-                    } else {
-                        capturado = false
-                    }
+            for(let i = 0; i< cantidadPokemons;i++){
+                if(lista[i].id_pokemon == id_pokemon){
+                    capturado = true
                 }
             }
-
-            console.log(cantidadPokemons, "RESULTADO")
+            if(!capturado){
+                capturar();
+            }else {
+                res.send("ya lo tienes")
+            }
         })
-
-        if (capturado == false) {
-            console.log("entramos")
-            await User.findOneAndUpdate({
-                _id: _id
-            }, {
-                $push: {
-                    pokemons: {
-                        "id_pokemon": id_pokemon,
-                        "imagen": imagen,
-                        "nombre": nombre,
-                        "elemento": elemento,
-                        "vida": vida,
-                        "ataque": ataque,
-                        "a_especial": a_especial,
-                        "velocidad": velocidad,
-                        "defensa": defensa
-                    }
-                }
-            })
-            res.send("pokemon has been captured")
-        } else {
-            console.log("entramos al else")
-            res.send("you already have this pokemon")
-        }
-
 
     } catch (error) {
         res.send(error)
