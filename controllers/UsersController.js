@@ -49,29 +49,31 @@ UsersController.atrapar = async (req, res) => {
     let a_especial = req.body.a_especial
     let velocidad = req.body.velocidad
     let defensa = req.body.defensa
-    let z;
+    let capturado = false;
 
     try {
 
         await User.find({
             _id: _id
         }).then(datos => {
-            let x = datos[0].pokemons.length;
-            let y = datos[0].pokemons
+            let cantidadPokemons = datos[0].pokemons.length;
 
-            for (let i = 0; i < x; i++) {
-                if (datos[0].pokemons[i]?.id_pokemon === id_pokemon) {
-                    console.log("hay repetidos")
-                    z = false
-                } else {
-                    z = true
+            if(cantidadPokemons >= 0){
+                for (let i = 0; i < cantidadPokemons; i++) {
+                    if (datos[0].pokemons[i]?.id_pokemon === id_pokemon) {
+                        console.log(i, "ESTO ES I")
+                        console.log(datos[0].pokemons[i]?.id_pokemon, id_pokemon)
+                        capturado = true
+                    } else {
+                        capturado = false
+                    }
                 }
             }
 
-            console.log(z, "RESULTADO")
+            console.log(cantidadPokemons, "RESULTADO")
         })
 
-        if (z == true) {
+        if (capturado == false) {
             console.log("entramos")
             await User.findOneAndUpdate({
                 _id: _id
