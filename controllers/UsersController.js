@@ -52,7 +52,7 @@ UsersController.atrapar = async (req, res) => {
     let z;
 
     try {
-       
+
         await User.find({
             _id: _id
         }).then(datos => {
@@ -67,18 +67,18 @@ UsersController.atrapar = async (req, res) => {
                     z = true
                 }
             }
-       
-        console.log(z, "RESULTADO")
-    })
+
+            console.log(z, "RESULTADO")
+        })
 
         if (z == true) {
             console.log("entramos")
-          await  User.findOneAndUpdate({
-                _id : _id
+            await User.findOneAndUpdate({
+                _id: _id
             }, {
                 $push: {
                     pokemons: {
-                        "id_pokemon":id_pokemon,
+                        "id_pokemon": id_pokemon,
                         "imagen": imagen,
                         "nombre": nombre,
                         "elemento": elemento,
@@ -95,7 +95,7 @@ UsersController.atrapar = async (req, res) => {
             console.log("entramos al else")
             res.send("you already have this pokemon")
         }
-   
+
 
     } catch (error) {
         res.send(error)
@@ -104,33 +104,16 @@ UsersController.atrapar = async (req, res) => {
 }
 
 UsersController.liberar = async (req, res) => {
-
-    console.log(req.body, "entra a unfollow")
-
-    let id_pokemon = req.body.id_pokemon;
-    let userId = req.body._id;
+    let _id = req.body._id
 
     try {
-        await User.find({
-            _id: userId 
-        }).then(elemento => {
-            let pokes = elemento[0].pokemons; 
 
-            // for(let i = 0; i< pokes.length; i++){
-            //     if (pokes[i].id_pokemon == id_pokemon) {
-            //         //remove it of followers array
-            //         pokes.splice(i, 1)
-            //         console.log("entramos en el if")
-            //     }
-            // }
-
-            res.send(pokes)
-
-        })
-
+        User.pokemons.pull(_id);
+        User.save();
+        res.send("se hizo")
 
     } catch (error) {
-        res.send(error)
+        res.send(error);
     }
 
 }
