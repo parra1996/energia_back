@@ -49,26 +49,53 @@ UsersController.atrapar = async (req, res) => {
     let a_especial = req.body.a_especial
     let velocidad = req.body.velocidad
     let defensa = req.body.defensa
+    let z;
 
     try {
-        await User.findOneAndUpdate({
+       
+        await User.find({
             _id: _id
-        }, {
-            $push: {
-                pokemons: {
-                    "id_pokemon": req.body.id_pokemon,
-                    "imagen": req.body.imagen,
-                    "nombre": req.body.nombre,
-                    "elemento": req.body.elemento,
-                    "vida": req.body.vida,
-                    "ataque": req.body.ataque,
-                    "a_especial": req.body.a_especial,
-                    "velocidad": req.body.velocidad,
-                    "defensa": req.body.defensa
+        }).then(datos => {
+            let x = datos[0].pokemons.length;
+            let y = datos[0].pokemons
+
+            for (let i = 0; i < x; i++) {
+                if (datos[0].pokemons[i]?.id_pokemon === id_pokemon) {
+                    console.log("hay repetidos")
+                    z = false
+                } else {
+                    z = true
                 }
             }
-        })
-        res.send("pokemon has been captured")
+       
+        console.log(z, "RESULTADO")
+    })
+
+        if (z == true) {
+            console.log("entramos")
+          await  User.findOneAndUpdate({
+                _id : _id
+            }, {
+                $push: {
+                    pokemons: {
+                        "id_pokemon":id_pokemon,
+                        "imagen": imagen,
+                        "nombre": nombre,
+                        "elemento": elemento,
+                        "vida": vida,
+                        "ataque": ataque,
+                        "a_especial": a_especial,
+                        "velocidad": velocidad,
+                        "defensa": defensa
+                    }
+                }
+            })
+            res.send("pokemon has been captured")
+        } else {
+            console.log("entramos al else")
+            res.send("you already have this pokemon")
+        }
+   
 
     } catch (error) {
         res.send(error)
