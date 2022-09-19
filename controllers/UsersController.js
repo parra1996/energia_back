@@ -51,26 +51,49 @@ UsersController.atrapar = async (req, res) => {
     let defensa = req.body.defensa
     let capturado = false;
 
-    const capturar = async () => {
+    function getRandomArbitrary(min, max) {
+        const randomValue = Math.floor(Math.random()) * (max - min) + min;
+        return randomValue;
+    }
 
-        await User.findOneAndUpdate({
-            _id: _id
-        }, {
-            $push: {
-                pokemons: {
-                    "id_pokemon": id_pokemon,
-                    "imagen": imagen,
-                    "nombre": nombre,
-                    "elemento": elemento,
-                    "vida": vida,
-                    "ataque": ataque,
-                    "a_especial": a_especial,
-                    "velocidad": velocidad,
-                    "defensa": defensa
+    const probabilidad = (cantidad) => {
+        const valor = getRandomArbitrary(cantidad, 0)
+
+        if (valor >= 0 && valor <= 4) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    const capturar = async (cantidad) => {
+
+        const available = probabilidad(cantidad);
+
+        if (available) {
+
+            await User.findOneAndUpdate({
+                _id: _id
+            }, {
+                $push: {
+                    pokemons: {
+                        "id_pokemon": id_pokemon,
+                        "imagen": imagen,
+                        "nombre": nombre,
+                        "elemento": elemento,
+                        "vida": vida,
+                        "ataque": ataque,
+                        "a_especial": a_especial,
+                        "velocidad": velocidad,
+                        "defensa": defensa
+                    }
                 }
-            }
-        })
-        res.send("pokemon has been captured")
+            })
+            res.send("pokemon has been captured")
+        } else {
+            res.send("you failed to capture the pokemon")
+        }
     }
 
     try {
@@ -81,15 +104,15 @@ UsersController.atrapar = async (req, res) => {
             let cantidadPokemons = datos[0].pokemons.length;
             let lista = datos[0].pokemons
 
-            for(let i = 0; i< cantidadPokemons;i++){
-                if(lista[i].id_pokemon == id_pokemon){
+            for (let i = 0; i < cantidadPokemons; i++) {
+                if (lista[i].id_pokemon == id_pokemon) {
                     capturado = true
                 }
             }
-            if(!capturado){
-                capturar();
-            }else {
-                res.send("ya lo tienes")
+            if (!capturado) {
+                capturar(cantidadPokemons);
+            } else {
+                res.send("you already have this pokemon")
             }
         })
 
@@ -116,7 +139,6 @@ UsersController.liberar = async (req, res) => {
 
 UsersController.mostrar = async (req, res) => {
     let _id = req.params._id
-    console.log(_id)
 
     try {
 
@@ -162,7 +184,6 @@ UsersController.userDelete = async (req, res) => {
                 _id: _id
             })
             .then(userDelete => {
-                console.log(userDelete);
                 res.send(`El usuario con el nombre ${userDelete.userName} ha sido eliminado`);
             }).catch(error => {
                 res.send(error)

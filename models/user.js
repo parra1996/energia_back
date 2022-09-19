@@ -17,7 +17,6 @@ const userSchema = new Schema({
     },
     pokemons :[
         {
-        
         id_pokemon: Number,
         imagen: String,
         nombre: String,
@@ -27,7 +26,6 @@ const userSchema = new Schema({
         a_especial: Number,
         velocidad: Number,
         defensa: Number,
-            
         }
     ],
     created: {
