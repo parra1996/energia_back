@@ -1,17 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const UsersController = require("../controllers/UsersController");
+const auth = require("../middlewares/auth");
 
 
 router.post("/", UsersController.userRegister);
 
-router.get("/", UsersController.allUser);
+router.get("/", auth, UsersController.allUser);
 
-router.delete("/", UsersController.userDelete);
+router.delete("/", auth,UsersController.userDelete);
 
-router.put("/", UsersController.userUpdate);
+router.put("/", auth,UsersController.userUpdate);
 
-router.post('/atrapar', UsersController.atrapar)
+router.post('/atrapar', auth, UsersController.atrapar)
 
 router.delete('/liberar', UsersController.liberar)
 
